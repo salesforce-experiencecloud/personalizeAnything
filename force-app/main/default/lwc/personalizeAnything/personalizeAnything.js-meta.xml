@@ -9,7 +9,7 @@
     </targets>
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
-            <property label="Edit Mode" name="editMode" type="Boolean" default="false" 
+            <property label="Edit Mode" name="editMode" type="Boolean" default="true" 
             description="When checked, this checkbox allows the builder to configure components within the personalized and default regions. It will not have any impact on the published site."/>
 
             <property label="Criterion 1: Form Factor" name="criterion1FormFactor" type="String" default="Any" 
