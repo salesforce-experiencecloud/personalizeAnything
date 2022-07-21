@@ -72,13 +72,13 @@ export default class PersonalizeAnythingV2 extends LightningElement {
         if (this.userRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
             return false;
         }
-        return this.editMode ? this.editMode : this.shouldPersonalize;
+        return this.editMode && this.isPreview ? true : this.shouldPersonalize;
     }
     get displayDefault() {
         if (this.userRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
             return false;
         }
-        return this.editMode ? this.editMode : !this.shouldPersonalize;
+        return this.editMode && this.isPreview ? true : !this.shouldPersonalize;
     }
     defaultReasons = [];
 
@@ -106,11 +106,7 @@ export default class PersonalizeAnythingV2 extends LightningElement {
         if(window['$A'] !== undefined && window['$A'] !== null) {
             this.isAura = true;
         } else {
-
-            if(this.isInSitePreview())
-            {
-                this.isPreview = true;
-            }
+            this.isPreview = this.isInSitePreview();
 
             let context = this;
 
@@ -333,28 +329,21 @@ export default class PersonalizeAnythingV2 extends LightningElement {
     }
 
     get defaultRegionReasonsStyle() {
-        if (!this.editMode) {
-            return 'display:none;';
-        } else {
+        if (this.editMode && this.isPreview) {
             return '';
+        } else {
+            return 'display:none;';
         }
     }
 
-    isInSitePreview()
-    {
-        if(window !== undefined && window !== null && window.location !== undefined && window.location !== null)
-        { 
-            try{
-                return (window.location.host.indexOf('sitepreview') > 0 || window.location.host.indexOf('livepreview') > 0 || window.location.host.indexOf('live.') > 0);
-            } catch(err)
-            {
-                return (document.URL.indexOf('sitepreview') > 0 || document.URL.indexOf('livepreview') > 0 || document.URL.indexOf('live.') > 0);
-            }
-        }
-        else 
-        {
-            return (document.URL.indexOf('sitepreview') > 0 || document.URL.indexOf('livepreview') > 0 || document.URL.indexOf('live.') > 0);
-        }
+    isInSitePreview() {
+        let url = document.URL;
+        
+        return (url.indexOf('sitepreview') > 0 
+            || url.indexOf('livepreview') > 0
+            || url.indexOf('live-preview') > 0 
+            || url.indexOf('live.') > 0
+            || url.indexOf('.builder.') > 0);
     }
 
 }
