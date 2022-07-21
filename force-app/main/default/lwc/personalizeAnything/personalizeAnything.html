@@ -1,0 +1,23 @@
+<template>
+    <template if:false={isAura}>
+        <div class="container" style={containerStyle}>
+        <template if:true={displayPersonalize}>
+            <slot name="personalizedRegion"></slot> 
+        </template>
+        <div class="defautRegionReasons" style={defaultRegionReasonsStyle}>
+            <ul>
+            <template for:each={defaultReasons} for:item="defaultReason">
+                <li key={defaultReason}>{defaultReason}</li>
+            </template>
+            </ul>
+        </div>
+        <template if:true={displayDefault}>
+            <slot name="defaultRegion"></slot> 
+        </template>
+        </div>
+    </template>
+    
+    <template if:true={isAura}>
+        <p class="slds-notify slds-notify_alert slds-alert_error">This component is not compatible with Aura runtime.</p>
+    </template>
+</template>

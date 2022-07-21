@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>54.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Personalize Anything (LWR)</masterLabel>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property label="Edit Mode" name="editMode" type="Boolean" default="false" 
+            description="When checked, this checkbox allows the builder to configure components within the personalized and default regions. It will not have any impact on the published site."/>
+
+            <property label="Criterion 1: Form Factor" name="criterion1FormFactor" type="String" default="Any" 
+            description="Evaluates the form factor at runtime, and checks against the value selected for this criterion."
+                datasource="Any,Desktop-only,Mobile-only,Tablet-only,Mobile and Tablet,Desktop and Tablet,Desktop and Mobile" />
+
+            <property label="Criterion 2: Authentication Status" name="criterion2AuthenticationStatus" type="String" default="Any" 
+            description="Evaluates the authentication status of the user, and checks against the value selected for this criterion."
+                datasource="Any,Authenticated,Guest" />
+            
+            <property label="Criterion 3: Source Value" name="criterion3SourceValue" type="String" 
+                description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. &lt;BR&gt;&lt;BR&gt;Examples: {!Item.Name}, {!Site.basePath}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
+
+            <property label="Comparison Operator" name="criterion3ComparisonOperator" type="String" 
+            description="Define the comparison operator value to use when checking the criterion source value against the target value."
+                datasource="Contains,Does Not Contain,Is Included Within,Is Not Included Within,Starts With,Equals,Does Not Equal,Is Greater Than,Is Less Than,Is Greater Than Or Equals, Is Less Than Or Equals" />
+
+            <property label="Target Value" name="criterion3TargetValue" type="String"
+            description="Define the target value for which the source value will be checked against, based on the selected comparison operator value." />
+
+            <property label="Value Type" name="criterion3ValueType" type="String" datasource="String,Boolean,Number" default="String" 
+            description="Select the type of value the source and target are. This will affect the way the values are compared and checked against one another using the selected comparison operator."/>
+            
+            <property label="Criterion 4: Source Value" name="criterion4SourceValue" type="String" 
+            description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. &lt;BR&gt;&lt;BR&gt;Examples: {!Item.Name}, {!Site.basePath}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
+
+            <property label="Comparison Operator" name="criterion4ComparisonOperator" type="String" 
+            description="Define the comparison operator value to use when checking the criterion source value against the target value."
+                datasource="Contains,Does Not Contain,Is Included Within,Is Not Included Within,Starts With,Equals,Does Not Equal,Is Greater Than,Is Less Than,Is Greater Than Or Equals, Is Less Than Or Equals" />
+
+            <property label="Target Value" name="criterion4TargetValue" type="String" 
+            description="Define the target value for which the source value will be checked against, based on the selected comparison operator value."/>
+
+            <property label="Value Type" name="criterion4ValueType" type="String" datasource="String,Boolean,Number" default="String" 
+            description="Select the type of value the source and target are. This will affect the way the values are compared and checked against one another using the selected comparison operator."/>
+           
+            <property label="Criterion 5: Source Value" name="criterion5SourceValue" type="String" 
+            description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. &lt;BR&gt;&lt;BR&gt;Examples: {!Item.Name}, {!Site.basePath}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
+
+            <property label="Comparison Operator" name="criterion5ComparisonOperator" type="String" 
+            description="Define the comparison operator value to use when checking the criterion source value against the target value."
+                datasource="Contains,Does Not Contain,Is Included Within,Is Not Included Within,Starts With,Equals,Does Not Equal,Is Greater Than,Is Less Than,Is Greater Than Or Equals, Is Less Than Or Equals" />
+
+            <property label="Target Value" name="criterion5TargetValue" type="String" 
+            description="Define the target value for which the source value will be checked against, based on the selected comparison operator value."/>
+
+            <property label="Value Type" name="criterion5ValueType" type="String" datasource="String,Boolean,Number" default="String" 
+            description="Select the type of value the source and target are. This will affect the way the values are compared and checked against one another using the selected comparison operator."/>
+            
+            <property label="Custom Logic" name="customLogic" type="String" 
+            description="Define the logic statement for how the criteria should be evaluated. If left blank, the criteria will be evaluated on an 'AND' basis, requiring all of them to match in order for the personalized region to display. e.g. 1 AND 2 AND 3 AND 4 AND 5 &lt;BR&gt;&lt;BR&gt; Example: (1 and 2) or (3 and 4) or !5" />
+
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
