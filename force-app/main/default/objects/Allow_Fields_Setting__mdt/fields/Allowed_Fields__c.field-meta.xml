@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Allowed_Fields__c</fullName>
+    <description>Include User, Contact, Account fields that are allowed to be used by the personalize anything component here. Example: @User.field1__c, @contact.name, @Account.customField1__c</description>
+    <externalId>false</externalId>
+    <fieldManageability>SubscriberControlled</fieldManageability>
+    <inlineHelpText>Include User, Contact, Account fields that are allowed to be used by the personalize anything component here. Example: @User.field1__c, @contact.name, @Account.customField1__c</inlineHelpText>
+    <label>Allowed Fields</label>
+    <length>131072</length>
+    <type>LongTextArea</type>
+    <visibleLines>50</visibleLines>
+</CustomField>
