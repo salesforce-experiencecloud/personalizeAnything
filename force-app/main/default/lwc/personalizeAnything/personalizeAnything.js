@@ -7,7 +7,7 @@
 
 
 import { LightningElement, api, wire } from 'lwc';
-import { getRecord } from 'lightning/uiRecordApi';
+import dataRequest from '@salesforce/apex/PersonalizeAnythingController.dataRequest';
 import IsGuest from '@salesforce/user/isGuest';
 import UserId from '@salesforce/user/Id';
 import ActiveLanguageCode from '@salesforce/i18n/lang';
@@ -16,7 +16,7 @@ import ActiveLanguageCode from '@salesforce/i18n/lang';
  * @slot personalizedRegion
  * @slot defaultRegion
  */
-export default class PersonalizeAnythingV2 extends LightningElement {
+export default class PersonalizeAnything extends LightningElement {
     isAura = false;
     isPreview = false;
     userId = UserId;
@@ -24,9 +24,10 @@ export default class PersonalizeAnythingV2 extends LightningElement {
     @api editMode;
     @api criterion1FormFactor;
     @api criterion2AuthenticationStatus;
-    userRequestFields = ['User.Id'];
-    userRequestActive = false;
-    userResponseData;
+    dataRequestFields = [];
+    dataRequestJSONInput;
+    dataRequestActive = false;
+    dataResponse;
     @api
     get criterion3SourceValue() {
         return this._criterion3SourceValue;
@@ -69,13 +70,13 @@ export default class PersonalizeAnythingV2 extends LightningElement {
     @api customLogic;
     shouldPersonalize;
     get displayPersonalize() {
-        if (this.userRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
+        if (this.dataRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
             return false;
         }
         return this.editMode && this.isPreview ? true : this.shouldPersonalize;
     }
     get displayDefault() {
-        if (this.userRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
+        if (this.dataRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
             return false;
         }
         return this.editMode && this.isPreview ? true : !this.shouldPersonalize;
@@ -83,20 +84,21 @@ export default class PersonalizeAnythingV2 extends LightningElement {
     defaultReasons = [];
 
 
-    @wire(getRecord, { recordId: '$userId', fields: '$userRequestFields' })
-    wiredRecord({ error, data }) {
-        this.userRequestActive = false;
+    @wire(dataRequest, { dataRequestJSONInput: '$dataRequestJSONInput' })
+    wiredDataResponse({ error, data }) {
+        this.dataRequestActive = false;
         if (error) {
-            let message = 'Unknown error';
-            if (Array.isArray(error.body)) {
-                message = error.body.map(e => e.message).join(', ');
-            } else if (typeof error.body.message === 'string') {
-                message = error.body.message;
-            }
-            console.log(message);
+            console.log(error);
         } else if (data) {
-            if (this.userRequestFields.length > 1 && data.fields) {
-                this.userResponseData = data.fields;
+            let dataResponse = JSON.parse(data);
+            if(dataResponse !== undefined && dataResponse !== null && dataResponse.error !== undefined && dataResponse.error !== null && dataResponse.error.trim() !== '')
+            {
+                console.log(dataResponse.error);
+                this.defaultReasons = [];
+                this.defaultReasons.push(dataResponse.error);
+            }
+            else if (this.dataRequestFields.length > 0) {
+                this.dataResponse = dataResponse;
                 this.shouldPersonalize = this.evaluateRules(this);
             }
         }
@@ -139,12 +141,59 @@ export default class PersonalizeAnythingV2 extends LightningElement {
     }
 
     setCriterionSourceValue(value) {
-        if (value && typeof value === 'string' && value.startsWith('@User.')) {
-            if (!this.userRequestFields.includes(value)) {
-                this.userRequestActive = true;
-                this.userRequestFields.push(value.substring(1));
+        if (value && typeof value === 'string' && (value.startsWith('@User.') || value.startsWith('@Contact.') || value.startsWith('@Account.'))) {
+            let fieldName = value.substring(1).toLowerCase();
+            if (!this.dataRequestFields.includes(fieldName)) {
+                this.dataRequestActive = true;
+                this.dataRequestFields.push(fieldName);
+                this.buildInputMapForDataRequest();
             }
         }
+    }
+
+    buildInputMapForDataRequest()
+    {
+        this.dataRequestJSONInput = undefined;
+        let dataRequestInput = {};
+        for(let i=0; i < this.dataRequestFields.length; i++)
+        {
+            let criterion = {};
+            if(this.criterion3SourceValue !== undefined && this.criterion3SourceValue !== null && this.dataRequestFields[i] === this.criterion3SourceValue.substring(1).toLowerCase())
+            {
+                criterion.sourceValue = this.criterion3SourceValue.toLowerCase();
+                criterion.operator = this.criterion3ComparisonOperator;
+                criterion.type = this.criterion3ValueType;
+                criterion.targetValue = this.criterion3TargetValue;
+                criterion.index = '3';
+            }
+            else if(this.criterion4SourceValue !== undefined && this.criterion4SourceValue !== null && this.dataRequestFields[i] === this.criterion4SourceValue.substring(1).toLowerCase())
+            {
+                criterion.sourceValue = this.criterion4SourceValue.toLowerCase();
+                criterion.operator = this.criterion4ComparisonOperator;
+                criterion.type = this.criterion4ValueType;
+                criterion.targetValue = this.criterion4TargetValue;
+                criterion.index = '4';
+            }
+            else if(this.criterion5SourceValue !== undefined && this.criterion5SourceValue !== null && this.dataRequestFields[i] === this.criterion5SourceValue.substring(1).toLowerCase())
+            {
+                criterion.sourceValue = this.criterion5SourceValue.toLowerCase();
+                criterion.operator = this.criterion5ComparisonOperator;
+                criterion.type = this.criterion5ValueType;
+                criterion.targetValue = this.criterion5TargetValue;
+                criterion.index = '5';
+            }
+            else 
+            {
+                criterion = undefined;
+            }
+
+            if(criterion !== undefined)
+            {
+                dataRequestInput[criterion.index] = criterion;
+            }
+
+        }
+        this.dataRequestJSONInput = JSON.stringify(dataRequestInput);
     }
 
     evaluateRules(context) {
@@ -205,11 +254,9 @@ export default class PersonalizeAnythingV2 extends LightningElement {
 
     evaluateCriterion(context, criterionSourceValue, criterionOperator, criterionValue, criterionValueType, criterionIndex) {
         if (typeof criterionSourceValue === 'string') {
-            if (criterionSourceValue && criterionSourceValue.startsWith('@User.')) {
-                let fieldName = criterionSourceValue.substring(criterionSourceValue.indexOf('.') + 1, criterionSourceValue.length);
-
-                if (context.userResponseData && context.userResponseData.hasOwnProperty(fieldName)) {
-                    criterionSourceValue = context.userResponseData[fieldName].value;
+             if (criterionSourceValue && (criterionSourceValue.startsWith('@User.') || criterionSourceValue.startsWith('@Contact.') || criterionSourceValue.startsWith('@Account.'))) {
+                if (context.dataResponse && context.dataResponse.hasOwnProperty(criterionIndex)) {
+                    return context.dataResponse[criterionIndex];
                 }
             } else if (criterionSourceValue === '@language') {
                 criterionSourceValue = this.activeLanguageCode;

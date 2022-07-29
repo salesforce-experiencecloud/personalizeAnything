@@ -3,6 +3,9 @@
     <types>
         <members>*</members>
         <name>LightningComponentBundle</name>
+        <members>PersonalizeAnythingController</members>
+        <members>PersonalizeAnythingControllerTest</members>
+        <name>ApexClass</name>
     </types>
     <version>55.0</version>
 </Package>
