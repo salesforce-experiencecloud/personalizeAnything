@@ -70,16 +70,16 @@ export default class PersonalizeAnything extends LightningElement {
     @api customLogic;
     shouldPersonalize;
     get displayPersonalize() {
-        if (this.dataRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
-            return false;
-        }
-        return this.editMode && this.isPreview ? true : this.shouldPersonalize;
+        return this.displayRegion(this.shouldPersonalize);
     }
     get displayDefault() {
+        return this.displayRegion(!this.shouldPersonalize);
+    }
+    displayRegion(shouldPersonalize) {
         if (this.dataRequestActive || this.criterion3RequestActive || this.criterion4RequestActive || this.criterion5RequestActive) {
             return false;
         }
-        return this.editMode && this.isPreview ? true : !this.shouldPersonalize;
+        return this.editMode && this.isPreview ? true : shouldPersonalize;
     }
     defaultReasons = [];
 
@@ -256,6 +256,9 @@ export default class PersonalizeAnything extends LightningElement {
         if (typeof criterionSourceValue === 'string') {
              if (criterionSourceValue && (criterionSourceValue.startsWith('@User.') || criterionSourceValue.startsWith('@Contact.') || criterionSourceValue.startsWith('@Account.'))) {
                 if (context.dataResponse && context.dataResponse.hasOwnProperty(criterionIndex)) {
+                    if (!context.dataResponse[criterionIndex]) {
+                        context.defaultReasons.push('Criterion ' + criterionIndex + ': ' + criterionValueType + ': ' + criterionSourceValue + ' ' + criterionOperator + ' ' + criterionValue);
+                    }
                     return context.dataResponse[criterionIndex];
                 }
             } else if (criterionSourceValue === '@language') {
