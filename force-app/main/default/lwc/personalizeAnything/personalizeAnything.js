@@ -22,23 +22,23 @@ export default class PersonalizeAnything extends LightningElement {
     userId = UserId;
     activeLanguageCode = ActiveLanguageCode;
     @api editMode;
-    @api criterion1FormFactor;
-    @api criterion2AuthenticationStatus;
+    @api criterion1FormFactor = 'Any';
+    @api criterion2AuthenticationStatus = 'Any';
     dataRequestFields = [];
     dataRequestJSONInput;
     dataRequestActive = false;
     dataResponse;
     @api
     get criterion3SourceValue() {
-        return this._criterion3SourceValue;
+        return (this._criterion3SourceValue !== undefined && this._criterion3SourceValue !== null) ? this._criterion3SourceValue : '';
     }
     @api
     get criterion4SourceValue() {
-        return this._criterion4SourceValue;
+        return (this._criterion4SourceValue !== undefined && this._criterion4SourceValue !== null) ? this._criterion4SourceValue : '';
     }
     @api
     get criterion5SourceValue() {
-        return this._criterion5SourceValue;
+        return (this._criterion5SourceValue !== undefined && this._criterion5SourceValue !== null) ? this._criterion5SourceValue : '';
     }
     set criterion3SourceValue(value) {
         this._criterion3SourceValue = value;
@@ -55,15 +55,15 @@ export default class PersonalizeAnything extends LightningElement {
         this.setCriterionSourceValue(value);
         this.shouldPersonalize = this.evaluateRules(this);
     }
-    @api criterion3ComparisonOperator;
-    @api criterion4ComparisonOperator;
-    @api criterion5ComparisonOperator;
-    @api criterion3TargetValue;
-    @api criterion4TargetValue;
-    @api criterion5TargetValue;
-    @api criterion3ValueType;
-    @api criterion4ValueType;
-    @api criterion5ValueType;
+    @api criterion3ComparisonOperator = 'Contains';
+    @api criterion4ComparisonOperator = 'Contains';
+    @api criterion5ComparisonOperator = 'Contains';
+    @api criterion3TargetValue = '';
+    @api criterion4TargetValue = '';
+    @api criterion5TargetValue = '';
+    @api criterion3ValueType = 'String';
+    @api criterion4ValueType = 'String';
+    @api criterion5ValueType = 'String';
     criterion3RequestActive = false;
     criterion4RequestActive = false;
     criterion5RequestActive = false;
@@ -253,6 +253,7 @@ export default class PersonalizeAnything extends LightningElement {
     }
 
     evaluateCriterion(context, criterionSourceValue, criterionOperator, criterionValue, criterionValueType, criterionIndex) {
+        
         if (typeof criterionSourceValue === 'string') {
              if (criterionSourceValue && (criterionSourceValue.startsWith('@User.') || criterionSourceValue.startsWith('@Contact.') || criterionSourceValue.startsWith('@Account.'))) {
                 if (context.dataResponse && context.dataResponse.hasOwnProperty(criterionIndex)) {
