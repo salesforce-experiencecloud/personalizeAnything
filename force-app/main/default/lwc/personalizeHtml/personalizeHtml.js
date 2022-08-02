@@ -47,6 +47,8 @@ export default class personalizeHtml extends LightningElement {
                 {   this.error = 'An error has occurred, please check the console log for more details.'
                     console.log(e);
                 }
+
+                this.shouldRender = true;
             }
 
         } else if (data) { 
@@ -58,8 +60,9 @@ export default class personalizeHtml extends LightningElement {
                 }
             }
             
+            this.shouldRender = true;
         }
-        this.shouldRender = true;
+        
     }
 
     setDataRequestFields(html) {
