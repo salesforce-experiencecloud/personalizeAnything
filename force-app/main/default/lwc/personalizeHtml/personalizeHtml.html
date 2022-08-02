@@ -2,4 +2,12 @@
     <template if:true={shouldRender}>
         <lightning-formatted-rich-text value={htmlMarkup}></lightning-formatted-rich-text>
     </template>
+    <template if:true={isInSitePreview}>
+        <template if:true={error}>
+            <div class="error">
+                <p>*** This will only display in builder / preview mode. ***</p>
+                <p>{error}</p>
+            </div>
+        </template>
+    </template>
 </template>

@@ -17,13 +17,38 @@ export default class personalizeHtml extends LightningElement {
         this._htmlMarkup = value;
         this.setDataRequestFields(value);
     }
+
+    @api
+    get isInSitePreview() {
+        let url = document.URL;
+        
+        return (url.indexOf('sitepreview') > 0 
+            || url.indexOf('livepreview') > 0
+            || url.indexOf('live-preview') > 0 
+            || url.indexOf('live.') > 0
+            || url.indexOf('.builder.') > 0);
+    }
+
     dataRequestFields = [];
     shouldRender = false
+    error;
 
     @wire(dataRequest, { params: '$dataRequestFields' })
     wiredRecord({ error, data }) {
         if (error) {
-            console.log(error);
+            
+            if(this.isInSitePreview)
+            {
+                if(error.body && error.body.message)
+                {
+                    this.error = error.body.message;
+                }
+                else 
+                {   this.error = 'An error has occurred, please check the console log for more details.'
+                    console.log(e);
+                }
+            }
+
         } else if (data) { 
             for (let index = 0; index < this.dataRequestFields.length; index++) {
                 let fieldName = this.dataRequestFields[index];
@@ -32,8 +57,9 @@ export default class personalizeHtml extends LightningElement {
                     this.htmlMarkup = this.htmlMarkup.replaceAll('@' + fieldName + ';', data[fieldNameResponse]);
                 }
             }
-            this.shouldRender = true;
+            
         }
+        this.shouldRender = true;
     }
 
     setDataRequestFields(html) {
@@ -44,4 +70,7 @@ export default class personalizeHtml extends LightningElement {
             }
         }
     }
+
+   
+
 }
