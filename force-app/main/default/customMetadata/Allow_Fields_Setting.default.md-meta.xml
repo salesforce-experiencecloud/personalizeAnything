@@ -4,7 +4,7 @@
     <protected>false</protected>
     <values>
         <field>Allowed_Fields__c</field>
-        <value xsi:type="xsd:string">@User.id, @contact.id, @account.Id</value>
+        <value xsi:type="xsd:string">@User.id</value>
     </values>
     <values>
         <field>Identifier__c</field>

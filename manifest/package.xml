@@ -7,6 +7,8 @@
     <types>
         <members>PersonalizeAnythingController</members>
         <members>PersonalizeAnythingControllerTest</members>
+        <members>PersonalizeHtmlController</members>
+        <members>PersonalizeHtmlControllerTest</members>
         <name>ApexClass</name> 
     </types>
     <types>
