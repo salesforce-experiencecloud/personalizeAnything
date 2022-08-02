@@ -21,7 +21,7 @@
                 datasource="Any,Authenticated,Guest" />
             
             <property label="Criterion 3: Source Value" name="criterion3SourceValue" type="String" 
-                description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. ---Examples: {!Item.Name}, {!Site.basePath}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
+                description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. ---Examples: {!Item.Name}, {!Route.param}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
 
             <property label="Comparison Operator" name="criterion3ComparisonOperator" type="String" 
             description="Define the comparison operator value to use when checking the criterion source value against the target value."
@@ -34,7 +34,7 @@
             description="Select the type of value the source and target are. This will affect the way the values are compared and checked against one another using the selected comparison operator."/>
             
             <property label="Criterion 4: Source Value" name="criterion4SourceValue" type="String" 
-            description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. ---Examples: {!Item.Name}, {!Site.basePath}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
+            description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. ---Examples: {!Item.Name}, {!Route.param}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
 
             <property label="Comparison Operator" name="criterion4ComparisonOperator" type="String" 
             description="Define the comparison operator value to use when checking the criterion source value against the target value."
@@ -47,7 +47,7 @@
             description="Select the type of value the source and target are. This will affect the way the values are compared and checked against one another using the selected comparison operator."/>
            
             <property label="Criterion 5: Source Value" name="criterion5SourceValue" type="String" 
-            description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. ---Examples: {!Item.Name}, {!Site.basePath}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
+            description="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. ---Examples: {!Item.Name}, {!Route.param}, @User.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input" />
 
             <property label="Comparison Operator" name="criterion5ComparisonOperator" type="String" 
             description="Define the comparison operator value to use when checking the criterion source value against the target value."
