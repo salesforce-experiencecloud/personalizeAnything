@@ -3,5 +3,5 @@
     <description>This setting is used to add fields allowed to be used by the Personalize Anything component.</description>
     <label>Allow Fields Setting</label>
     <pluralLabel>Allow Fields Settings</pluralLabel>
-    <visibility>Protected</visibility>
+    <visibility>Public</visibility>
 </CustomObject>
