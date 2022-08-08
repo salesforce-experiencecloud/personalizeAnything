@@ -9,7 +9,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import dataRequest from '@salesforce/apex/PersonalizeAnythingController.dataRequest';
 import IsGuest from '@salesforce/user/isGuest';
-import UserId from '@salesforce/user/Id';
 import ActiveLanguageCode from '@salesforce/i18n/lang';
 
 /**
@@ -19,7 +18,6 @@ import ActiveLanguageCode from '@salesforce/i18n/lang';
 export default class PersonalizeAnything extends LightningElement {
     isAura = false;
     isPreview = false;
-    userId = UserId;
     activeLanguageCode = ActiveLanguageCode;
     @api editMode;
     @api criterion1FormFactor = 'Any';
