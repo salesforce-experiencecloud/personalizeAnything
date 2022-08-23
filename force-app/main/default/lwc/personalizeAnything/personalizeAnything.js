@@ -7,6 +7,7 @@
 
 
 import { LightningElement, api, wire } from 'lwc';
+import { CurrentPageReference } from 'lightning/navigation';
 import dataRequest from '@salesforce/apex/PersonalizeAnythingController.dataRequest';
 import IsGuest from '@salesforce/user/isGuest';
 import ActiveLanguageCode from '@salesforce/i18n/lang';
@@ -66,6 +67,8 @@ export default class PersonalizeAnything extends LightningElement {
     criterion4RequestActive = false;
     criterion5RequestActive = false;
     @api customLogic;
+    @api personalizedRegionClassNames;
+    @api defaultRegionClassNames;
     shouldPersonalize;
     get displayPersonalize() {
         return this.displayRegion(this.shouldPersonalize);
@@ -80,7 +83,16 @@ export default class PersonalizeAnything extends LightningElement {
         return this.editMode && this.isPreview ? true : shouldPersonalize;
     }
     defaultReasons = [];
+    resizeListener;
+    dataResponseListener;
 
+    @wire(CurrentPageReference)
+    setCurrentPageReference(ref) {
+        let context = this;
+        setTimeout(function() {
+            context.shouldPersonalize = context.evaluateRules(context);
+        }, 100);
+    }
 
     @wire(dataRequest, { dataRequestJSONInput: '$dataRequestJSONInput' })
     wiredDataResponse({ error, data }) {
@@ -110,11 +122,13 @@ export default class PersonalizeAnything extends LightningElement {
 
             let context = this;
 
-            window.addEventListener('resize', function(e) {
+            this.resizeListener = function(e) {
+                console.log('resize');
                 context.shouldPersonalize = context.evaluateRules(context);
-            });
+            }
+            window.addEventListener('resize', this.resizeListener);
 
-            document.addEventListener('personalizeAnything:dataResponse', function(e) {
+            this.dataResponseListener = function(e) {
                 let payload = e.detail;
 
                 if (payload.index && payload.binding) {
@@ -132,10 +146,16 @@ export default class PersonalizeAnything extends LightningElement {
                         context.shouldPersonalize = context.evaluateRules(context);
                     }
                 }
-            });
+            }
+            document.addEventListener('personalizeAnything:dataResponse', this.dataResponseListener);
 
             context.shouldPersonalize = context.evaluateRules(context);
         }
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener('resize', this.resizeListener);
+        document.removeEventListener('personalizeAnything:dataResponse', this.dataResponseListener);
     }
 
     setCriterionSourceValue(value) {
@@ -261,7 +281,7 @@ export default class PersonalizeAnything extends LightningElement {
                     return context.dataResponse[criterionIndex];
                 }
             } else if (criterionSourceValue === '@language') {
-                criterionSourceValue = this.activeLanguageCode;
+                criterionSourceValue = context.activeLanguageCode;
             } else if (criterionSourceValue === '@currentURL') {
                 criterionSourceValue = document.URL;
             } else if (criterionSourceValue === '@userAgent') {

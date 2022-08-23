@@ -2,7 +2,9 @@
     <template if:false={isAura}>
         <div class="container" style={containerStyle}>
         <template if:true={displayPersonalize}>
-            <slot name="personalizedRegion"></slot> 
+            <div class={personalizedRegionClassNames}>
+                <slot name="personalizedRegion"></slot> 
+            </div>
         </template>
         <div class="defautRegionReasons" style={defaultRegionReasonsStyle}>
             <ul>
@@ -12,7 +14,9 @@
             </ul>
         </div>
         <template if:true={displayDefault}>
-            <slot name="defaultRegion"></slot> 
+            <div class={defaultRegionClassNames}>
+                <slot name="defaultRegion"></slot>
+            </div>
         </template>
         </div>
     </template>

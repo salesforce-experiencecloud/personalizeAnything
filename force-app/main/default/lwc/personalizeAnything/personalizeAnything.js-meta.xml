@@ -62,6 +62,11 @@
             <property label="Custom Logic" name="customLogic" type="String" 
             description="Define the logic statement for how the criteria should be evaluated. If left blank, the criteria will be evaluated on an 'AND' basis, requiring all of them to match in order for the personalized region to display. e.g. 1 AND 2 AND 3 AND 4 AND 5 ---Example: (1 and 2) or (3 and 4) or !5" />
 
+            <property label="Personalized Region Classes" name="personalizedRegionClassNames" type="String" 
+            description="Class names to uniquely target the personalized region's styles." />
+
+            <property label="Default Region Classes" name="defaultRegionClassNames" type="String" 
+            description="Class names to uniquely target the default region's styles." />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>
