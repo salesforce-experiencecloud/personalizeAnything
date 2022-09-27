@@ -3,6 +3,10 @@
     <apiVersion>54.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>Personalize HTML</masterLabel>
+    <description>Renders HTML with custom token replacements for user-related fields.</description>
+    <capabilities>
+        <capability>lightningCommunity__RelaxedCSP</capability>
+    </capabilities>
     <targets>
         <target>lightningCommunity__Page</target>
         <target>lightning__RecordPage</target>

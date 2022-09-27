@@ -3,6 +3,12 @@
     <apiVersion>54.0</apiVersion>
     <isExposed>true</isExposed>
     <masterLabel>Personalize Anything (LWR)</masterLabel>
+    <description>
+        Personalize an entire region of components in your Experience Cloud LWR site with Personalize Anything!
+    </description>
+    <capabilities>
+        <capability>lightningCommunity__RelaxedCSP</capability>
+    </capabilities>
     <targets>
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Default</target>
