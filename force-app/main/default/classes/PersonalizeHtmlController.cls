@@ -16,7 +16,7 @@ public with sharing class PersonalizeHtmlController {
         for (String param : params) {
             List<String> splitParam = param.split('\\.');
             
-            String resourceName = splitParam[0];
+            String resourceName = splitParam[0].toLowerCase();
             if (splitParam.size() != 2) {
                 continue;
             }
@@ -70,16 +70,38 @@ public with sharing class PersonalizeHtmlController {
         
         Map<String, Schema.SObjectField> userFieldMap = Schema.SObjectType.User.fields.getMap();
         for (String userField : userFields) {
-            if (user.isSet(userField) && userFieldMap.get(userField).getDescribe().isAccessible()) {
-                response.put('user.' + userField, user.get(userField));
+
+            userField = userField.toLowerCase();
+
+            if(userFields.contains(userField)) {
+
+                Object tmpFieldValue = '';
+            
+                if (user.isSet(userField) && userFieldMap.get(userField).getDescribe().isAccessible()) {
+                    tmpFieldValue = user.get(userField) != null ? user.get(userField) : tmpFieldValue;
+                }
+
+                response.put('user.' + userField, tmpFieldValue);
+
             }
         }
 
         if (contact != null) {
             Map<String, Schema.SObjectField> contactFieldMap = Schema.SObjectType.Contact.fields.getMap();
             for (String contactField : contactFields) {
-                if (contact.isSet(contactField) && contactFieldMap.get(contactField).getDescribe().isAccessible()) {
-                    response.put('contact.' + contactField, contact.get(contactField));
+
+                contactField = contactField.toLowerCase();
+
+                if(contactFields.contains(contactField)) {
+
+                    Object tmpFieldValue = '';
+                
+                    if (contact.isSet(contactField) && contactFieldMap.get(contactField).getDescribe().isAccessible()) {
+                        tmpFieldValue = contact.get(contactField) != null ? contact.get(contactField) : tmpFieldValue;
+                    }
+
+                    response.put('contact.' + contactField, tmpFieldValue);
+
                 }
             }
         }
@@ -87,8 +109,19 @@ public with sharing class PersonalizeHtmlController {
         if (account != null) {
             Map<String, Schema.SObjectField> accountFieldMap = Schema.SObjectType.Account.fields.getMap();
             for (String accountField : accountFields) {
-                if (account.isSet(accountField) && accountFieldMap.get(accountField).getDescribe().isAccessible()) {
-                    response.put('account.' + accountField, account.get(accountField));
+
+                accountField = accountField.toLowerCase();
+
+                if(accountFields.contains(accountField)) {
+
+                    Object tmpFieldValue = '';
+
+                    if (account.isSet(accountField) && accountFieldMap.get(accountField).getDescribe().isAccessible()) {
+                        tmpFieldValue = account.get(accountField) != null ? account.get(accountField) : tmpFieldValue;
+                    }
+
+                    response.put('account.' + accountField, tmpFieldValue);
+
                 }
             }
         }
