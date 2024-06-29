@@ -610,6 +610,98 @@ declare module 'lightning/uiRecordApi' {
     export function getFieldDisplayValue(record: RecordRepresentation, field: FieldId | string): FieldValueRepresentationValue | undefined;
 }
 
+declare module 'lightning/industriesEducationPublicApi' {
+    /**
+     * Representation of the benefit assignment record updated with provider information.
+     * Keys:
+     *    id (string): id
+     */
+    export interface MentoringBenefitAssignment {
+        /** The ID of the benefit associated with the benefit assignment. */
+        benefitId: string;
+        /** The contact ID of the provider associated with the benefit assignment. */
+        providerId: string;
+        /** The ID of the user who created the benefit assignment. */
+        createdById: string;
+        /** The date that the benefit assignment was created. */
+        createdDate: string;
+        /** The last date and time that the benefit assignment is available. */
+        endDateTime: string;
+        /** The ID of the enrollee assoicated with the benefit assignment. */
+        enrolleeId: string;
+        /** The default quantity associated with the benefit assignment. */
+        enrollmentCount: string;
+        /** The amount of the entitlement associated with the benefit assignment. */
+        entitlementAmount: string;
+        /** The ID of the benefit assignment */
+        id: string;
+        /** The ID of the user who updated the benefit assignment. */
+        lastModifiedById: string;
+        /** The date of the most recent update to the benefit assignment. */
+        lastModifiedDate: string;
+        /** The maximum amount of the benefit associated with the benefit assignment. */
+        maximumBenefitAmount: string;
+        /** The minimum amount of the benefit associated with the benefit. */
+        minimumBenefitAmount: string;
+        /** The name of the benefit assignment. */
+        name: string;
+        /** The ID of the parent record associated with the benefit assignment. */
+        parentRecordId: string;
+        /** The priority associated with the benefit assignment. */
+        priority: string;
+        /** The ID of the program enrollment created for the participant to whom you want to assign this benefit. */
+        programEnrollmentId: string;
+        /** The date and time when the benefit assignment is first available. */
+        startDateTime: string;
+        /** The status associated with the benefit assignment. */
+        status: string;
+        /** The status of the task job associated with the benefit assignment. */
+        taskJobStatus: string;
+        /** The status message of the task job associated with the benefit assignment. */
+        taskJobStatusMessage: string;
+        /** The ID of the unit of measure associated with the benefit assignment. */
+        unitOfMeasureId: string;
+    }
+
+    /**
+     * Representation of the output for the benefit assignment request.
+     */
+    export interface MentoringBenefitAssignmentOutputRepresentation {
+        /** Representation of the benefit assignment record updated with provider information. */
+        mentoringBenefitAssignment: MentoringBenefitAssignment;
+    }
+
+    /**
+     * Return the benefit assignment record with updated provider record lookup.
+     * @param benefitAssignmentId The ID of the benefit assignment record.
+     * @param providerId The ID of the provider offering associated with the benefit assignment.
+     */
+    export function postBenefitAssignment({
+        benefitAssignmentId,
+        providerId,
+    }: {
+        benefitAssignmentId: string;
+        providerId: string;
+    }): Promise<MentoringBenefitAssignmentOutputRepresentation>;
+}
+
+declare module 'lightning/industriesSchedulerApi' {
+    /**
+     * Wire adapter for getting Engagment ChannelTypes.
+     */
+    export function getEngagementChannelTypes(): void;
+
+    /**
+     * Wire adapter for creating a Service Appointment.
+     */
+    export function createServiceAppointment(): void;
+
+    /**
+     * Wire adapter for updating a Service Appointment.
+     */
+    export function updateServiceAppointment(): void;
+}
+
 declare module 'lightning/platformScaleCenterApi' {
     /**
      * Wire adapter for a Scale Center observability metrics.
@@ -620,11 +712,77 @@ declare module 'lightning/platformScaleCenterApi' {
     export function getMetrics(request: string): void;
 }
 
+declare module 'lightning/placeQuoteApi' {
+    /**
+     * Wire adapter for updates using Place Quote API
+     */
+    export function updateQuote(): void;
+}
+
+declare module 'lightning/salesAutomationRulesApi' {
+    /**
+     * Wire adapter for Automation Rules apply reminder
+     *
+     * @param id the ID string of the reminder to be applied
+     */
+    export function applyReminder(id: string): void;
+}
+
 declare module 'lightning/salesEnablementProgramApi' {
     /**
      * Wire adapter for getting Sales Enablement Program templates list.
      */
     export function getProgramTemplates(): void;
+
+    /**
+     * Wire adapter for getting Sales Enablement Program details of the programTemplateName passed as url param.
+     * @param programTemplateName name of the template for which details are required
+     */
+    export function getProgramTemplate(programTemplateName: string): void;
+}
+
+declare module 'lightning/salesUserWorkingHoursApi' {
+    /**
+     * Wire adapter for getting sales user working hours availability.
+     */
+    export function getSalesUserWorkingHours(): void;
+
+    /**
+     * Wire adapter for updating sales user working hours availability.
+     */
+    export function updateSalesUserWorkingHours(): void;
+
+    /**
+     * Wire adapter for creating sales user working hours availability.
+     */
+    export function createSalesUserWorkingHours(): void;
+
+    /**
+     * Wire adapter for deleting sales user working hours availability.
+     */
+    export function deleteSalesUserWorkingHours(): void;
+}
+
+declare module 'lightning/salesEngagementWorkspaceApi' {
+    /**
+     * Wire adapter for getting sales user workspace personalization.
+     */
+    export function getWorkspaceUserPersonalization(): void;
+
+    /**
+     * Wire adapter for getting sales user workspace supported objects.
+     */
+    export function getEngagementWorkspaceObjects(): void;
+
+    /**
+     * Wire adapter for updating sales user workspace personalization.
+     */
+    export function updateWorkspaceUserPersonalization(): void;
+
+    /**
+     * Wire adapter for deleting sales user workspace personalization.
+     */
+    export function deleteWorkspaceUserPersonalization(): void;
 }
 
 declare module 'lightning/analyticsWaveApi' {
@@ -2000,6 +2158,65 @@ declare module 'lightning/analyticsWaveApi' {
     }
 
     /**
+     * An Analytics template asset reference.
+     *
+     * https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_rest.meta/bi_dev_guide_rest/bi_responses_asset_reference.htm
+     *
+     * Keys:
+     *    (none)
+     */
+    export interface TemplateAssetReferenceRepresentation {
+        /** The 18 character ID of the asset. */
+        id?: string;
+        /** The asset label. */
+        label?: string;
+        /** The asset developer name. */
+        name?: string;
+        /** The namespace that qualifies the asset name */
+        namespace?: string;
+        /** The asset URL. */
+        url?: string;
+    }
+
+    /**
+     * Representation for individual validation task
+     *
+     * https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_rest.meta/bi_dev_guide_rest/bi_responses_template_readiness_item.htm
+     *
+     * Keys:
+     *    (none)
+     */
+    export interface TemplateReadinessItemRepresentation {
+        /** The icon/image associated with the validation task. */
+        image: TemplateAssetReferenceRepresentation | null;
+        /** The task specific label. */
+        label: string | null;
+        /** The task specific message. */
+        message: string | null;
+        /** The status for the readiness task */
+        readinessStatus: string | null;
+        /** The collection of tags describing the purpose of the validation. */
+        tags: Array<string>;
+        /** The task specific type, associated with readiness check type. */
+        type: string | null;
+    }
+
+    /**
+     * Representation for a single Wave Template verification.
+     *
+     * https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_rest.meta/bi_dev_guide_rest/bi_responses_template_validate.htm
+     *
+     * Keys:
+     *    id (string): id
+     */
+    export interface TemplateValidateRepresentation {
+        /** The ID or fully qualified API name of this template. */
+        id: string;
+        /** The individual validation tasks for this template */
+        tasks: Array<TemplateReadinessItemRepresentation>;
+    }
+
+    /**
      * Time at which something should happen
      *
      * https://developer.salesforce.com/docs/atlas.en-us.bi_dev_guide_rest.meta/bi_dev_guide_rest/bi_resources_appendix.htm#TimeRepresentation
@@ -3178,6 +3395,7 @@ declare module 'lightning/analyticsWaveApi' {
      * @param folderId Filters the collection to only contain datasets for the specified folder. The ID can be the requesting user's ID for
      *                 datasets in the user's private folder.
      * @param hasCurrentOnly Filters the collection of datasets to include only those datasets that have a current version. The default is `false`.
+     * @param ids Filter the collection to include only datasets with the specified IDs.
      * @param includeCurrentVersion Specifies if the response should include the current version metadata. The default is `false`.
      * @param licenseType The response includes dataflow jobs with this license type. Valid values are `EinsteinAnalytics` or `Sonic`.
      * @param order Ordering to apply to the collection results. Valid values are `Ascending` or `Descending`.
@@ -3196,6 +3414,7 @@ declare module 'lightning/analyticsWaveApi' {
         datasetTypes?: string,
         folderId?: string,
         hasCurrentOnly?: boolean,
+        ids?: string[],
         includeCurrentVersion?: boolean,
         licenseType?: string,
         order?: string,
@@ -3616,4 +3835,21 @@ declare module 'lightning/analyticsWaveApi' {
         xmdType: string;
         xmd: XmdInputRepresentation;
     }): Promise<XmdRepresentation>;
+
+    /**
+     * Validates an Analytics template for org readiness.
+     *
+     * https://developer.salesforce.com/docs/component-library/documentation/en/lwc/reference_analytics_validate_wave_template
+     *
+     * @param templateIdOrApiName The ID of template to retrieve the validation value for.
+     * @param templateValidateParam The input to validate an Analytics template.
+     * @param templateValidateParam.values A map of runtime template values to use during validation. These values override any default values.
+     */
+    export function validateWaveTemplate({
+        templateIdOrApiName,
+        templateValidateParam,
+    }: {
+        templateIdOrApiName: string;
+        templateValidateParam: { values?: { [key: string]: unknown } };
+    }): Promise<TemplateValidateRepresentation>;
 }
