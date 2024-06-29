@@ -1,0 +1,92 @@
+<template>
+
+    <div class="slds-m-bottom_medium">
+        <a href="https://multilvlmenusforexpcloudupdates.substack.com/p/documentation" 
+            target="_blank"
+            class="slds-button slds-button_outline-brand docLink"
+            >
+            Documentation
+            <lightning-icon class="slds-m-left_small docIcon" icon-name="utility:new_window" size="xx-small" alternative-text="Open Documentation in New Window" title="Open Documentation in New Window"></lightning-icon>
+            
+        </a>
+    </div>
+
+    <lightning-tabset>
+        <lightning-tab label="General">
+
+            <lightning-input 
+                type={propInputs.doNotUseLightningFormattedRichText.type} 
+                label={propInputs.doNotUseLightningFormattedRichText.label} 
+                class={propInputs.doNotUseLightningFormattedRichText.classes} 
+                checked={propInputs.doNotUseLightningFormattedRichText.value}
+                onchange={propInputs.doNotUseLightningFormattedRichText.changeHandler} 
+                data-key={propInputs.doNotUseLightningFormattedRichText.key}
+                field-level-help={propInputs.doNotUseLightningFormattedRichText.help} 
+                required={propInputs.doNotUseLightningFormattedRichText.required}
+                >
+            </lightning-input>
+
+            <label class="slds-form-element__label slds-m-right_x-large">
+                {propInputs.htmlMarkup.label} 
+            </label>
+            <lightning-button 
+                variant="brand" 
+                label={propInputs.htmlMarkup.buttonLabel} 
+                title={propInputs.htmlMarkup.buttonLabel}  
+                onclick={propInputs.htmlMarkup.clickHandler}  
+                class={propInputs.htmlMarkup.classes} 
+                >
+
+            </lightning-button>
+
+            <template if:true={showModal}>
+                <section role="dialog" tabindex="-1" class={modalClass} aria-modal="true">
+                    <div class="slds-modal__container">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCloseModal}>
+                            <lightning-icon
+                                icon-name="utility:close"
+                                size="small"
+                                alternative-text="Indicates close"
+                            >
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <div class="slds-modal__header">
+                            {propInputs.htmlMarkup.label} 
+                        </div>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            
+                            <div class="slds-m-vertical_large slds-align_absolute-center">
+                                {propInputs.htmlMarkup.help}
+                            </div>
+
+                            
+                            <div class="slds-grid slds-wrap slds-m-bottom_large">
+
+                                <lightning-textarea
+                                    value={propInputs.htmlMarkup.value} 
+                                    label={propInputs.htmlMarkup.label} 
+                                    data-key={propInputs.htmlMarkup.key}
+                                    >
+                                </lightning-textarea>
+
+                            </div>
+                                
+
+
+                        </div>
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button_brand" onclick={handleSaveHtmlMarkup}>Save</button>
+                            <button class="slds-button slds-button_brand" onclick={handleCloseModal}>Close</button>
+                        </div>
+                    </div>
+                </section>
+            </template>
+            <template if:true={displayBackdrop}>
+                <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+            </template>
+
+        </lightning-tab>
+    </lightning-tabset>
+
+</template>

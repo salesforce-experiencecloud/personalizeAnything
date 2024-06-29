@@ -1,0 +1,18 @@
+<template>
+    <template if:true={shouldRender}>
+        <template lwc:if={doNotUseLightningFormattedRichText}>
+            <span role="dynamicHTMLContainer"></span>
+        </template>
+        <template lwc:else>
+            <lightning-formatted-rich-text value={htmlMarkup}></lightning-formatted-rich-text>
+        </template>
+    </template>
+    <template if:true={isInSitePreview}>
+        <template if:true={error}>
+            <div class="error">
+                <p>*** This will only display in builder / preview mode. ***</p>
+                <p>{error}</p>
+            </div>
+        </template>
+    </template>
+</template>

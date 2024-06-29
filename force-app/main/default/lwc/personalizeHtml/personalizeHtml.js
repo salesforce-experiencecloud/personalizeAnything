@@ -29,6 +29,8 @@ export default class personalizeHtml extends LightningElement {
             || url.indexOf('.builder.') > 0);
     }
 
+    @api doNotUseLightningFormattedRichText = false;
+
     dataRequestFields = [];
     shouldRender = false
     error;
