@@ -5,10 +5,15 @@
  * For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { LightningElement, api, wire } from 'lwc';
+import { LightningElement, api, wire, track } from 'lwc';
 import dataRequest from '@salesforce/apex/PersonalizeHtmlController.dataRequest';
+import { CurrentPageReference } from 'lightning/navigation';
 
-export default class personalizeHtml extends LightningElement {
+import * as generalUtils from 'c/gtaUtilsGeneral';
+import {isInSitePreview} from 'c/gtaUtilsExperience';
+
+
+export default class personalizeHtml2 extends LightningElement {
 
     @api configJSONString = '{}';
 
@@ -25,22 +30,28 @@ export default class personalizeHtml extends LightningElement {
     }
 
     get htmlMarkup() {
+        return this.doReplaceTokens(this.htmlMarkupOrig);
+    }
 
-        let tmpvalue = this.htmlMarkupOrig;
+    get scriptTextOrig() {
+
+        let tmpvalue = (generalUtils.isStringEmpty(this.configObj?.scriptText) || this.configObj?.scriptText.trim() === 'undefined') 
+        ? '' : this.configObj?.scriptText;
         
-        for (let index = 0; index < this.dataRequestFields.length; index++) {
-            let fieldName = this.dataRequestFields[index];
-            let fieldNameResponse = fieldName.toLowerCase();
-            if (this.dataProvider.hasOwnProperty(fieldNameResponse)) {
-                tmpvalue = tmpvalue.replaceAll('@' + fieldName + ';', this.dataProvider[fieldNameResponse]);
-            }
-        }
-
         return tmpvalue;
     }
 
+    get scriptText() {
+        return this.doReplaceTokens(this.scriptTextOrig);
+    }
+
     get dataRequestFields() {
-        return this.setDataRequestFields(this.htmlMarkupOrig);
+        let htmlMarkupFields = this.setDataRequestFields(this.htmlMarkupOrig);
+        let scriptTextFields = this.setDataRequestFields(this.scriptTextOrig);
+        let mergedFields = htmlMarkupFields.concat(scriptTextFields.filter(item2 =>
+            !htmlMarkupFields.some(item1 => item1 === item2)
+        ));
+        return mergedFields;
     }
 
     get doNotUseLightningFormattedRichText() {
@@ -51,19 +62,15 @@ export default class personalizeHtml extends LightningElement {
     }
 
     get isInSitePreview() {
-        let url = document.URL;
-        
-        return (url.indexOf('sitepreview') > 0 
-            || url.indexOf('livepreview') > 0
-            || url.indexOf('live-preview') > 0 
-            || url.indexOf('live.') > 0
-            || url.indexOf('.builder.') > 0);
+        return isInSitePreview(this.pageRef);
     }
 
+    @track pageRef;
 
     dataProvider;
     shouldRender = false
     renderedDynamicHTML = false;
+    renderedDynamicScript = false;
     error;
 
     @wire(dataRequest, { params: '$dataRequestFields' })
@@ -94,15 +101,34 @@ export default class personalizeHtml extends LightningElement {
         
     }
 
+    @wire(CurrentPageReference) handlePageReference(pageReference) {
+        // do something with pageReference.state
+        this.pageRef = pageReference;
+    }
+       
+
     renderedCallback() {
         if(this.renderedDynamicHTML === false && this.shouldRender === true && this.doNotUseLightningFormattedRichText === true 
-            && this.htmlMarkup !== undefined && this.htmlMarkup !== null && this.htmlMarkup.trim() !== '')
+            && generalUtils.isStringEmpty(this.htmlMarkup) === false)
         {
             let dynamicHTMLContainerEl = this.template.querySelector('[role="dynamicHTMLContainer"]');
             if(dynamicHTMLContainerEl !== undefined && dynamicHTMLContainerEl !== null)
             {
                 dynamicHTMLContainerEl.innerHTML = this.htmlMarkup;
                 this.renderedDynamicHTML = true;
+            }
+        }
+
+        if(this.renderedDynamicScript === false && this.shouldRender === true && this.doNotUseLightningFormattedRichText === true 
+            && generalUtils.isStringEmpty(this.scriptText) === false)
+        {
+            let dynamicScriptContainerEl = this.template.querySelector('[role="dynamicScriptContainer"]');
+            if(dynamicScriptContainerEl !== undefined && dynamicScriptContainerEl !== null)
+            {
+                let dynamicScriptEl = document.createElement('script');
+                dynamicScriptEl.text = this.scriptText;
+                dynamicScriptContainerEl.appendChild(dynamicScriptEl);
+                this.renderedDynamicScript = true;
             }
         }
     }
@@ -116,6 +142,23 @@ export default class personalizeHtml extends LightningElement {
             }
         }
         return tmpvalue;
+    }
+
+    doReplaceTokens(text) {
+
+        if(generalUtils.isArrayEmpty(this.dataRequestFields) === false && generalUtils.isObjectEmpty(this.dataProvider) === false)
+        {
+            
+            for (let index = 0; index < this.dataRequestFields.length; index++) {
+                let fieldName = this.dataRequestFields[index];
+                let fieldNameResponse = fieldName.toLowerCase();
+                if (this.dataProvider.hasOwnProperty(fieldNameResponse)) {
+                    text = text.replaceAll('@' + fieldName + ';', this.dataProvider[fieldNameResponse]);
+                }
+            }
+
+        }
+        return text;
     }
 
    

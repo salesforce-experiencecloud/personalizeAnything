@@ -14,6 +14,9 @@
     <lightning-tabset>
         <lightning-tab label="General">
 
+            <div class="slds-m-vertical_large slds-align_absolute-center">
+                {propInputs.doNotUseLightningFormattedRichText.help}
+            </div>
             <lightning-input 
                 type={propInputs.doNotUseLightningFormattedRichText.type} 
                 label={propInputs.doNotUseLightningFormattedRichText.label} 
@@ -67,6 +70,9 @@
                                     value={propInputs.htmlMarkup.value} 
                                     label={propInputs.htmlMarkup.label} 
                                     data-key={propInputs.htmlMarkup.key}
+                                    class={propInputs.htmlMarkup.classes} 
+                                    field-level-help={propInputs.htmlMarkup.help} 
+                                    required={propInputs.htmlMarkup.required}
                                     >
                                 </lightning-textarea>
 
@@ -85,6 +91,75 @@
             <template if:true={displayBackdrop}>
                 <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
             </template>
+
+
+            <template lwc:if={propInputs.doNotUseLightningFormattedRichText.value}>
+
+                <label class="slds-form-element__label slds-m-right_x-large">
+                    {propInputs.scriptText.label} 
+                </label>
+                <lightning-button 
+                    variant="brand" 
+                    label={propInputs.scriptText.buttonLabel} 
+                    title={propInputs.scriptText.buttonLabel}  
+                    onclick={propInputs.scriptText.clickHandler}  
+                    class={propInputs.scriptText.classes} 
+                    >
+
+                </lightning-button>
+
+                <template if:true={showScriptTextModal}>
+                    <section role="dialog" tabindex="-1" class={modalClass} aria-modal="true">
+                        <div class="slds-modal__container">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCloseScriptTextModal}>
+                                <lightning-icon
+                                    icon-name="utility:close"
+                                    size="small"
+                                    alternative-text="Indicates close"
+                                >
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <div class="slds-modal__header">
+                                {propInputs.scriptText.label} 
+                            </div>
+                            <div class="slds-modal__content slds-p-around_medium">
+                                
+                                <div class="slds-m-vertical_large slds-align_absolute-center">
+                                    {propInputs.scriptText.help}
+                                </div>
+
+                                
+                                <div class="slds-grid slds-wrap slds-m-bottom_large">
+
+                                    <lightning-textarea
+                                        value={propInputs.scriptText.value} 
+                                        label={propInputs.scriptText.label} 
+                                        data-key={propInputs.scriptText.key}
+                                        class={propInputs.scriptText.classes} 
+                                        field-level-help={propInputs.scriptText.help} 
+                                        required={propInputs.scriptText.required}
+                                        >
+                                    </lightning-textarea>
+
+                                </div>
+                                    
+
+
+                            </div>
+                            <div class="slds-modal__footer">
+                                <button class="slds-button slds-button_brand" onclick={handleSaveScriptText}>Save</button>
+                                <button class="slds-button slds-button_brand" onclick={handleCloseScriptTextModal}>Close</button>
+                            </div>
+                        </div>
+                    </section>
+                </template>
+                <template if:true={displayBackdrop}>
+                    <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+                </template>
+
+            </template>
+
 
         </lightning-tab>
     </lightning-tabset>

@@ -2,6 +2,7 @@
     <template if:true={shouldRender}>
         <template lwc:if={doNotUseLightningFormattedRichText}>
             <span role="dynamicHTMLContainer"></span>
+            <span role="dynamicScriptContainer" lwc:dom="manual"></span>
         </template>
         <template lwc:else>
             <lightning-formatted-rich-text value={htmlMarkup}></lightning-formatted-rich-text>
