@@ -1,0 +1,33 @@
+<template>
+    <template if:false={isAura}>
+        <div class="container" style={containerStyle}>
+            <template lwc:if={noActiveRequests}>
+                <template if:true={displayPersonalize}>
+                    <div class={personalizedRegionClassNames}>
+                        <slot name="personalizedRegion"></slot> 
+                    </div>
+                </template>
+
+                <template if:true={displayReasons}>
+                    <div class="defautRegionReasons">
+                        <ul>
+                        <template for:each={defaultReasons} for:item="defaultReason">
+                            <li key={defaultReason}><lightning-formatted-text value={defaultReason} linkify></lightning-formatted-text></li>
+                        </template>
+                        </ul>
+                    </div>
+                </template>
+
+                <template if:true={displayDefault}>
+                    <div class={defaultRegionClassNames}>
+                        <slot name="defaultRegion"></slot>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </template>
+    
+    <template if:true={isAura}>
+        <p class="slds-notify slds-notify_alert slds-alert_error">This component is not compatible with Aura runtime.</p>
+    </template>
+</template>

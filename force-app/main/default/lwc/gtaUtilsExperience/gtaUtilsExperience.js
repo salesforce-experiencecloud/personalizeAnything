@@ -101,8 +101,16 @@ export function getExperienceSiteBasePath()
  * @returns {boolean}
  * Example: let inSitePreview = isInSitePreview();
  */
-export function isInSitePreview(pageRef) {
-    return (pageRef?.state?.app === "commeditor" || pageRef?.state?.view === "editor");
+export function isInSitePreview() {
+
+     let domain = document.URL.split('?')[0].replace('https://','').split('/')[0];
+     return (domain.includes('.sitepreview.')  
+            || domain.includes('.livepreview.') 
+            || domain.includes('.live-preview.')  
+            || domain.includes('.live.') 
+            || domain.includes('.builder.') 
+            );
+
 }
 
 
@@ -122,4 +130,8 @@ export function loadScript(url) {
         script.addEventListener('load', resolve);
         script.addEventListener('error', reject);
     })
+}
+
+export function isAura() {
+    return (window['$A'] !== undefined && window['$A'] !== null);
 }

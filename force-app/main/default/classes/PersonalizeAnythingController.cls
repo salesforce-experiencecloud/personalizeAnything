@@ -14,8 +14,9 @@ public without sharing class PersonalizeAnythingController {
             if(dataRequestJSONInput != null && dataRequestJSONInput.trim() != '')
             {
                 Set<String> allowedFieldsSet = new Set<String>();
+                personalizeAny__Allow_Fields_Setting__mdt defaultSettings = getAllowFieldsSettings('default');
 
-                for(String s : getAllowFieldsSettings('default').personalizeAny__Allowed_Fields__c.split(','))
+                for(String s : defaultSettings.personalizeAny__Allowed_Fields__c.split(','))
                 {
                     allowedFieldsSet.add(s.trim().toLowerCase());
                 }
@@ -41,7 +42,7 @@ public without sharing class PersonalizeAnythingController {
                     }
                     else 
                     {
-                        String errorText = 'The following field was not found in the allowed list: ' + criterion.sourceValue + ', please add it to the Personalize Anything Allowed Fields Settings in order to use it for personalization.';
+                        String errorText = 'The following field was not found in the allowed list: ' + criterion.sourceValue + ', please add it to the Personalize Anything Allowed Fields Settings in order to use it for personalization: https://' + System.DomainCreator.getLightningHostname() + '/lightning/setup/CustomMetadata/page?address=%2F' + defaultSettings.Id;
                         throw new personalizeAnythingException(errorText);
                     }
                 }

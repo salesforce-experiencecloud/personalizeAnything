@@ -2,20 +2,20 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>54.0</apiVersion>
     <isExposed>true</isExposed>
-    <masterLabel>(deprecated) Personalize HTML</masterLabel>
-    <description>Renders HTML with custom token replacements for user-related fields.</description>
+    <masterLabel>Personalize Anything (LWR)</masterLabel>
+    <description>
+        Personalize an entire region of components in your Experience Cloud LWR site with Personalize Anything!
+    </description>
     <capabilities>
         <capability>lightningCommunity__RelaxedCSP</capability>
     </capabilities>
     <targets>
         <target>lightningCommunity__Page</target>
-        <target>lightning__RecordPage</target>
         <target>lightningCommunity__Default</target>
     </targets>
     <targetConfigs>
         <targetConfig targets="lightningCommunity__Default">
-            <property name="htmlMarkup" type="String" label="HTML Markup" default="Use syntax such as @User.Name; inline with your own HTML markup"
-            description="Use HTML with syntax such as @User.Name; @Contact.Name; @Account.Name;" />
+            <property label="configJSONString" name="configJSONString" type="String" editor="c/personalizeAnythingCpe" />
         </targetConfig>
     </targetConfigs>
 </LightningComponentBundle>

@@ -1,0 +1,361 @@
+<template>
+
+    <div class="slds-m-bottom_medium">
+        <a href="https://personalizeanything4expcloudlwr.substack.com/p/documentation" 
+            target="_blank"
+            class="slds-button slds-button_outline-brand docLink"
+            >
+            Documentation
+            <lightning-icon class="slds-m-left_small docIcon" icon-name="utility:new_window" size="xx-small" alternative-text="Open Documentation in New Window" title="Open Documentation in New Window"></lightning-icon>
+            
+        </a>
+    </div>
+
+    <lightning-tabset>
+        <lightning-tab label="General">
+
+            <div class="slds-m-vertical_large slds-align_absolute-center">
+                {propInputs.editMode.help}
+            </div>
+            <lightning-input 
+                type={propInputs.editMode.type} 
+                label={propInputs.editMode.label} 
+                class={propInputs.editMode.classes} 
+                checked={propInputs.editMode.value}
+                onchange={propInputs.editMode.changeHandler} 
+                data-key={propInputs.editMode.key}
+                field-level-help={propInputs.editMode.help} 
+                required={propInputs.editMode.required}
+                >
+            </lightning-input>
+
+            <template lwc:if={propInputs.editMode.value}>
+                <div class={propInputs.editRegion.classes}>
+                    <lightning-select
+                        name={propInputs.editRegion.key}
+                        label={propInputs.editRegion.label} 
+                        value={propInputs.editRegion.value}
+                        options={propInputs.editRegion.options}
+                        onchange={propInputs.editRegion.changeHandler}
+                        required={propInputs.editRegion.required}
+                        data-key={propInputs.editRegion.key}
+                        field-level-help={propInputs.editRegion.help} 
+                        ></lightning-select>
+                </div>
+            </template>
+
+            <label class="slds-form-element__label slds-m-right_x-large">
+                {propInputs.criteriaMap.label} 
+            </label>
+            <lightning-button 
+                variant="brand" 
+                label={propInputs.criteriaMap.buttonLabel} 
+                title={propInputs.criteriaMap.buttonLabel}  
+                onclick={propInputs.criteriaMap.clickHandler}  
+                class={propInputs.criteriaMap.classes} 
+                >
+
+            </lightning-button>
+
+            <template if:true={showModal}>
+                <section role="dialog" tabindex="-1" class={modalClass} aria-modal="true">
+                    <div class="slds-modal__container">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCloseModal}>
+                            <lightning-icon
+                                icon-name="utility:close"
+                                size="small"
+                                alternative-text="Indicates close"
+                            >
+                            </lightning-icon>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <div class="slds-modal__header">
+                            {propInputs.criteriaMap.label} 
+                        </div>
+                        <div class="slds-modal__content slds-p-around_medium">
+                            
+                            <div class="slds-m-vertical_large slds-align_absolute-center">
+                                {propInputs.criteriaMap.help}
+                            </div>
+
+                            <div class="slds-grid slds-wrap slds-m-bottom_large">
+
+                                <div class="slds-size_4-of-12">
+                                    <div class={propInputs.formFactor.classes}>
+                                        <lightning-select
+                                            name={propInputs.formFactor.key}
+                                            label={propInputs.formFactor.label} 
+                                            value={propInputs.formFactor.value}
+                                            options={propInputs.formFactor.options}
+                                            required={propInputs.formFactor.required}
+                                            data-key={propInputs.formFactor.key}
+                                            field-level-help={propInputs.formFactor.help} 
+                                            ></lightning-select>
+                                    </div>
+
+                                    <div class={propInputs.authenticationStatus.classes}>
+                                        <lightning-select
+                                            name={propInputs.authenticationStatus.key}
+                                            label={propInputs.authenticationStatus.label} 
+                                            value={propInputs.authenticationStatus.value}
+                                            options={propInputs.authenticationStatus.options}
+                                            required={propInputs.authenticationStatus.required}
+                                            data-key={propInputs.authenticationStatus.key}
+                                            field-level-help={propInputs.authenticationStatus.help} 
+                                            ></lightning-select>
+                                    </div>
+                                </div>
+
+                                <div class="slds-size_2-of-12 slds-p-horizontal_medium">
+                                    &nbsp;
+                                </div>
+
+                                <div class="slds-size_6-of-12 slds-p-horizontal_medium">
+
+                                    <lightning-textarea
+                                        value={propInputs.customLogic.value} 
+                                        label={propInputs.customLogic.label} 
+                                        data-key={propInputs.customLogic.key}
+                                        class={propInputs.customLogic.classes} 
+                                        field-level-help={propInputs.customLogic.help} 
+                                        required={propInputs.customLogic.required}
+                                        >
+                                    </lightning-textarea>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="slds-grid slds-wrap slds-m-bottom_large">
+
+                                <template lwc:if={criteriaMapTmp}>
+                                    
+
+                                        <template for:each={criteriaMapTmp} for:item="mapping">
+                                            <div key={mapping.id} class="slds-size_1-of-12 slds-p-around_medium">
+                                                Criterion {mapping.itemNumber}
+                                            </div>
+                                            <div key={mapping.id} class="slds-size_2-of-12 slds-p-horizontal_medium">
+                                                <lightning-select
+                                                    name={mapping.id}
+                                                    data-id={mapping.id}
+                                                    data-type="type"
+                                                    label="Type"
+                                                    value={mapping.type}
+                                                    options={typeOptions}
+                                                    onchange={handleCriterionTypeChange}
+                                                    class=""
+                                                    data-key={mapping.itemNumber}
+                                                    field-level-help="Select the type of value the source and target are. This will affect the way the values are compared and checked against one another using the selected comparison operator."
+                                                    ></lightning-select>
+                                            </div>
+                                            <div key={mapping.id} class="slds-size_3-of-12 slds-p-horizontal_medium">
+                                                <lightning-input 
+                                                    type="text" 
+                                                    data-id={mapping.id}
+                                                    data-type="sourceValue"
+                                                    data-key={mapping.itemNumber}
+                                                    label="Source Value"
+                                                    class="" 
+                                                    value={mapping.sourceValue}
+                                                    field-level-help="Define the source value of the criterion to be checked against the target value, based on the selected comparison operator. ---Examples: {!Item.Name}, {!Route.param}, @User.Name, @Contact.Name, @Account.Name, @language, @currentURL, @userAgent, @cookie.name, @customEventIdentifier.input"
+                                                    >
+                                                </lightning-input>
+                                            </div>
+                                            <div key={mapping.id} class="slds-size_2-of-12 slds-p-horizontal_medium">
+                                                <lightning-select
+                                                    name={mapping.id}
+                                                    data-id={mapping.id}
+                                                    data-type="operator"
+                                                    label="Operator"
+                                                    value={mapping.operator}
+                                                    options={mapping.operatorOptions}
+                                                    class=""
+                                                    data-key={mapping.itemNumber}
+                                                    field-level-help="Define the comparison operator value to use when checking the criterion source value against the target value."
+                                                    ></lightning-select>
+                                            </div>
+                                            <div key={mapping.id} class="slds-size_3-of-12 slds-p-horizontal_medium">
+
+                                                <template lwc:if={mapping.inputIsSelect}>
+                                                    <lightning-select
+                                                        name={mapping.id}
+                                                        data-id={mapping.id}
+                                                        data-type="targetValue"
+                                                        label="Target Value"
+                                                        value={mapping.targetValue}
+                                                        options={booleanTargetOptions}
+                                                        class=""
+                                                        data-key={mapping.itemNumber}
+                                                        field-level-help="Choose boolean target value (true or false)"
+                                                        ></lightning-select>
+                                                </template>
+                                                <template lwc:else>
+                                                    <lightning-input 
+                                                        type={mapping.inputType} 
+                                                        data-id={mapping.id}
+                                                        data-type="targetValue"
+                                                        data-key={mapping.itemNumber}
+                                                        label="Target Value"
+                                                        class="" 
+                                                        value={mapping.targetValue}
+                                                        field-level-help="Define the target value for which the source value will be checked against, based on the selected comparison operator value."
+                                                        >
+                                                    </lightning-input>
+                                                </template>
+                                                
+                                            </div>
+                                            <div key={mapping.id} class="slds-size_1-of-12 slds-align_absolute-center">
+                                                <a href="javascript:void(0);" data-id={mapping.id} data-index={index} onclick={handleDeleteCriteriaMap}>
+                                                    <lightning-icon
+                                                        icon-name="utility:delete"
+                                                        size="small"
+                                                        alternative-text="Indicates delete"
+                                                    >
+                                                    </lightning-icon>
+                                                </a>
+                                            </div>
+                                        </template>
+
+                                    
+                                </template>
+                                
+                                <template lwc:else>
+                                    <button class="slds-button slds-button_brand slds-m-left_medium" onclick={handleAddCriteriaMap}>Add Criterion</button>
+                                </template>
+
+                            </div>
+
+                        </div>
+                        <div class="slds-modal__footer">
+                            <button class="slds-button slds-button_brand" onclick={handleAddCriteriaMap}>Add Criterion</button>
+                            <button class="slds-button slds-button_brand" onclick={handleSaveCriteriaMap}>Save</button>
+                            <button class="slds-button slds-button_destructive" onclick={handleClearCriteriaMap}>Clear All</button>
+                            <button class="slds-button slds-button_brand" onclick={handleCloseModal}>Close</button>
+                        </div>
+                    </div>
+                </section>
+            </template>
+            <template if:true={displayBackdrop}>
+                <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+            </template>
+
+
+
+        </lightning-tab>
+
+        <lightning-tab label="Advanced">
+
+            <lightning-input 
+                type={propInputs.debugMode.type} 
+                label={propInputs.debugMode.label} 
+                class={propInputs.debugMode.classes} 
+                checked={propInputs.debugMode.value}
+                onchange={propInputs.debugMode.changeHandler} 
+                data-key={propInputs.debugMode.key}
+                field-level-help={propInputs.debugMode.help} 
+                required={propInputs.debugMode.required}
+                >
+            </lightning-input>
+
+            <div class="slds-p-left_small slds-p-top_medium">
+                        
+                <div>
+                    <span class="slds-form-element__label">Deployment</span>
+                </div>
+
+                <div class="inlineBlock slds-m-right_medium slds-m-top_medium">
+                    <lightning-button label="Save Config" title="Save Config" 
+                        onclick={handleExportConfig}></lightning-button>
+                </div>
+                
+                <div class="inlineBlock slds-m-top_medium">
+                    <lightning-button label="Load Config" title="Load Config"
+                        onclick={openImportModal}></lightning-button>
+                </div>
+
+                <template lwc:if={exportError}>
+                    <div class="slds-text-color_error slds-text-body_small">{exportError}</div>
+                </template>
+
+
+                <template if:true={importModalOpen}>
+
+                    <div class="demo-only" style="height: 640px;">
+                        <section role="dialog" tabindex="-1" class={modalClass} aria-modal="true">
+                            <div class="slds-modal__container">
+                                <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={closeImportModal}>
+                                    <lightning-icon
+                                        icon-name="utility:close"
+                                        size="small"
+                                        alternative-text="Indicates close"
+                                    >
+                                    </lightning-icon>
+                                    <span class="slds-assistive-text">Close</span>
+                                </button>
+                                <header class="slds-modal__header">
+                                    Load Component Configuration
+                                </header>
+                                <div class="slds-modal__content slds-p-around_medium">
+                                    
+                                    <div class="slds-m-vertical_large slds-align_absolute-center slds-text-color_destructive">
+                                        Caution: This action will overwrite the current values of your component properties, can potentially cause corruption, and is not reversible. 
+                                    </div>
+
+                                    <div class="slds-m-vertical_large slds-align_absolute-center">
+                                        <label class="slds-form-element__label" for="fileImport">Select Properties Config File (.json)</label> <br/>
+                                        <input id="fileImport" type="file" data-name="importConfigFile" accept=".json"/>
+                                    </div>
+
+                                    <template lwc:if={importError}>
+                                        <div class="slds-text-color_error slds-text-body_small">{importError}</div>
+                                    </template>
+                                    
+                                </div>
+                                <footer class="slds-modal__footer">
+                                    <button class="slds-button slds-button_destructive" onclick={handleImportConfig}>Load</button>
+                                    <button class="slds-button slds-button_brand" onclick={closeImportModal}>Cancel</button>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </div>
+                </template>
+
+            </div>
+
+        </lightning-tab>
+
+        <lightning-tab label="CSS Classes">
+
+            <lightning-input 
+                type={propInputs.personalizedRegionCSSClasses.type} 
+                label={propInputs.personalizedRegionCSSClasses.label} 
+                class={propInputs.personalizedRegionCSSClasses.classes} 
+                value={propInputs.personalizedRegionCSSClasses.value}
+                onchange={propInputs.personalizedRegionCSSClasses.changeHandler} 
+                data-key={propInputs.personalizedRegionCSSClasses.key}
+                field-level-help={propInputs.personalizedRegionCSSClasses.help} 
+                required={propInputs.personalizedRegionCSSClasses.required}
+                >
+            </lightning-input>
+
+            <lightning-input 
+                type={propInputs.defaultRegionCSSClasses.type} 
+                label={propInputs.defaultRegionCSSClasses.label} 
+                class={propInputs.defaultRegionCSSClasses.classes} 
+                value={propInputs.defaultRegionCSSClasses.value}
+                onchange={propInputs.defaultRegionCSSClasses.changeHandler} 
+                data-key={propInputs.defaultRegionCSSClasses.key}
+                field-level-help={propInputs.defaultRegionCSSClasses.help} 
+                required={propInputs.defaultRegionCSSClasses.required}
+                >
+            </lightning-input>
+
+        </lightning-tab>
+
+    </lightning-tabset>
+
+</template>
