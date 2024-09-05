@@ -157,11 +157,11 @@ export default class PersonalizeAnything2 extends LightningElement {
     shouldPersonalize;
 
     get displayPersonalize() {
-        if (this.anyActiveRequests()) {
+        if (this.noActiveRequests === false) {
             return false;
         }
 
-        if(this.editMode && this.isPreview)
+        if(this.editMode === true && this.isPreview === true)
         {
             if (this.editRegion === 'Both Regions' || this.editRegion === 'Personalized Region')
             {
@@ -178,11 +178,11 @@ export default class PersonalizeAnything2 extends LightningElement {
 
     get displayDefault() {
 
-        if (this.anyActiveRequests()) {
+        if (this.noActiveRequests === false) {
             return false;
         }
 
-        if(this.editMode && this.isPreview)
+        if(this.editMode === true && this.isPreview === true)
         {
             if (this.editRegion === 'Both Regions' || this.editRegion === 'Default Region')
             {
@@ -202,7 +202,7 @@ export default class PersonalizeAnything2 extends LightningElement {
     }
 
     get noActiveRequests() {
-        return !this.anyActiveRequests();
+        return !this.anyActiveRequests() || (this.editMode === true && this.isPreview === true);
     }
  
     defaultReasons = [];
@@ -484,7 +484,12 @@ export default class PersonalizeAnything2 extends LightningElement {
         }
    
         let criterionRender = true;
-        if (typeof criterionSourceValue === 'string') {
+        if(generalUtils.isObjectEmpty(criterionSourceValue) === true)
+        {
+            criterionRender = false;
+            context.defaultReasons.push('Criterion ' + context.criteriaMapTmp[criterionIndex].itemNumber + ': No Source Value found.');
+        }
+        else if (typeof criterionSourceValue === 'string') {
             let criterionSourceValueFormat = criterionSourceValue? criterionSourceValue.toLowerCase() : '';
             let criterionValueFormat = criterionValue ? criterionValue.toLowerCase() : '';
             let validOperators = ['Contains', 'Does Not Contain', 'Is Included Within', 'Is Not Included Within', 'Starts With', 'Equals', 'Does Not Equal'];

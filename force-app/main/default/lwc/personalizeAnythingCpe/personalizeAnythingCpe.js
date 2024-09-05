@@ -183,7 +183,7 @@ export default class PersonalizeAnythingCpe extends LightningElement {
                 value: '', //default value
                 doSetDefaultValue: true, //set to true to set this lightning-input's default value to what is stored in the value object
                 classes: defaultCSSClasses + '', //css classes for html lightning-input tag
-                changeHandler: this.handlePersonalizedRegionCSSClassesChange, //onchange handler for html lightning-input tag
+                changeHandler: this.handlePersonalizedRegionClassesChange, //onchange handler for html lightning-input tag
             },
             defaultRegionCSSClasses: {
                 key: 'defaultRegionCSSClasses', //key used for html lightning-input tag identifier, must match key in propInputs
@@ -195,7 +195,7 @@ export default class PersonalizeAnythingCpe extends LightningElement {
                 value: '', //default value
                 doSetDefaultValue: true, //set to true to set this lightning-input's default value to what is stored in the value object
                 classes: defaultCSSClasses + '', //css classes for html lightning-input tag
-                changeHandler: this.handleDefaultRegionCSSClassesChange, //onchange handler for html lightning-input tag
+                changeHandler: this.handleDefaultRegionClassesChange, //onchange handler for html lightning-input tag
             },
             debugMode: {
                 key: 'debugMode', //key used for html lightning-input tag identifier, must match key in propInputs
@@ -278,7 +278,7 @@ export default class PersonalizeAnythingCpe extends LightningElement {
     connectedCallback() {
 
         let styleEl = document.createElement('style');
-        styleEl.classList.add('ccnavmenus-' + this.uuid);
+        styleEl.classList.add('personalizeAnything-' + this.uuid);
         styleEl.innerHTML = propertyEditorWidthStyle;
         document.body.appendChild(styleEl);
 
@@ -286,7 +286,7 @@ export default class PersonalizeAnythingCpe extends LightningElement {
     }
 
     disconnectedCallback() {
-        let styleEl = document.body.querySelector('style.ccnavmenus-' + this.uuid);
+        let styleEl = document.body.querySelector('style.personalizeAnything-' + this.uuid);
         if(generalUtils.isObjectEmpty(styleEl) === false)
         {
             styleEl.remove();
