@@ -456,7 +456,7 @@ export default class PersonalizeAnythingCpe extends LightningElement {
                         {
                             this.criteriaMapTmp[i].sourceValue = currValue;
                             if (currValue && typeof currValue === 'string' && 
-                                (currValue.toLowerCase().startsWith('@User.') || currValue.startsWith('@Contact.') || currValue.startsWith('@Account.'))
+                                (currValue.toLowerCase().startsWith('@user.') || currValue.toLowerCase().startsWith('@contact.') || currValue.toLowerCase().startsWith('@account.'))
                             ) 
                             {
                                 this.criteriaMapTmp[i].requestActive = true;

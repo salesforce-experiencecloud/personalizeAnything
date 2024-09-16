@@ -154,7 +154,7 @@ export default class PersonalizeAnything2 extends LightningElement {
     dataResponse;
     hasRerenderedOnce = false;
 
-    shouldPersonalize;
+    @track shouldPersonalize;
 
     get displayPersonalize() {
         if (this.noActiveRequests === false) {
@@ -421,11 +421,11 @@ export default class PersonalizeAnything2 extends LightningElement {
     evaluateCriterion(context, criterionSourceValue, criterionDataType, criterionOperator, criterionValue, criterionValueType, criterionIndex, criterionNumber) {
         
         if (typeof criterionSourceValue === 'string') {
-             if (generalUtils.isStringEmpty(criterionSourceValue) === false && criterionDataType === 'dp' && (criterionSourceValue.startsWith('@User.') || criterionSourceValue.startsWith('@Contact.') || criterionSourceValue.startsWith('@Account.'))) {
+             if (generalUtils.isStringEmpty(criterionSourceValue) === false && criterionDataType === 'dp' && (criterionSourceValue.toLowerCase().startsWith('@user.') || criterionSourceValue.toLowerCase().startsWith('@contact.') || criterionSourceValue.toLowerCase().startsWith('@account.'))) {
                 if (context.dataResponse && context.dataResponse.hasOwnProperty(criterionNumber)) {
                     
                     context.defaultReasons.push('Criterion ' + context.criteriaMapTmp[criterionIndex].itemNumber + ': ' + criterionValueType + ': ' + criterionSourceValue + ' ' + criterionOperator + ' ' + criterionValue);
-                    
+                    context.criteriaMapTmp[criterionIndex].requestActive = false;
                     return context.dataResponse[criterionNumber];
                 }
             } else if (criterionSourceValue === '@language') {
